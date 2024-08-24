@@ -2,7 +2,7 @@ import time
 from turtle import Turtle, Screen
 import os
 
-SPEED = 0.15
+SPEED = 0.1
 MOVE_DISTANCE=20
 
 HEADING_DOWN=270

@@ -1,6 +1,7 @@
 from turtle import Screen
 from snake import Snake
 from fruits import Fruit
+from scoreboard import ScoreBoard
 
 screen = Screen()
 screen.setup(width=500, height=500)
@@ -9,7 +10,7 @@ screen.bgcolor("black")
 
 snake = Snake()
 fruit = Fruit()
-
+scoreboard = ScoreBoard()
 
 screen.listen()
 screen.onkey(snake.moveDown, "Down")
@@ -28,6 +29,7 @@ def game():
         if snake.head.distance(fruit) < 25:
             snake.enlarge()
             fruit.refresh()
+            scoreboard.addScore()
 
     
 
