@@ -1,32 +1,41 @@
 from turtle import Turtle, Screen
 import random, math
 
-timmy = Turtle()
+
 screen = Screen()
+screen.setup(width=500, height=500)
 
-timmy.pencolor("red")
+colors=["green", "red", "blue", "yellow", "purple"]
 
+offsetY = 500 / 6
 
-moves = [0, 90, 180, 270]
+turtles=[]
 
-screen.colormode(255)
+for turtleColor in colors:
+    turt = Turtle(shape="turtle")
+    turt.penup()
+    turt.color(turtleColor)
+    turt.goto(y=-250+offsetY, x=-250 + 10)
+    offsetY = offsetY + 500 / 6
+    turtles.append(turt)
 
-def change_color():
-    R = math.ceil(random.random() * 255)
-    B = math.ceil(random.random()* 255)
-    G = math.ceil(random.random()* 255) 
+print(turtles)
+user_bet = screen.textinput(title="Make your bet", prompt="Which turtle will win the race?")
 
-    print(R,G,B)
+print(user_bet)
 
-    timmy.pencolor(R, G, B)
+race_over  = False
+winner = ""
 
+while not race_over: 
+    for turtle in turtles:
+        turtle.forward(random.random() * 10)
+        if turtle.xcor() > 200:
+            winner=turtle.color()
+            race_over = True
 
-timmy.speed("fastest")
-timmy.pensize(10)
-
-for _ in range(600):
-    change_color()
-    timmy.right(random.choice(moves))
-    timmy.forward(20)
-
+if winner == user_bet:
+    screen.textinput("you suck", " haha")
+else: 
+    screen.textinput("bravo", "haha")
 screen.exitonclick()
