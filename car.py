@@ -15,7 +15,7 @@ class Car():
         b = math.ceil(random.random() * 255)
         car.color(r,g,b)
         car.goto(x = 200, y = -250 + random.random() * 500 )
-        car.shapesize(stretch_len=2, stretch_wid=1)
+        car.shapesize(stretch_len=2, stretch_wid=0.8)
         #car.goto(x = 50, y = 50 )
         car.setheading(180)
         self.cars.append(car)
