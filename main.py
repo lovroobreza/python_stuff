@@ -1,37 +1,56 @@
 from turtle import Screen
-from snake import Snake
-from fruits import Fruit
-from scoreboard import ScoreBoard
+import time
+
+from player import Player
+from car import Car
 
 screen = Screen()
-screen.setup(width=500, height=500)
-screen.title("Snakez")
+screen.setup(width=500, height=700)
+screen.title("crossy roads")
 screen.bgcolor("black")
 
-snake = Snake()
-fruit = Fruit()
-scoreboard = ScoreBoard()
+screen.tracer(0)
+screen.colormode(255)
+player = Player()
+car = Car()
 
 screen.listen()
-screen.onkey(snake.moveDown, "Down")
-screen.onkey(snake.moveLeft, "Left")
-screen.onkey(snake.moveUp, "Up")
-screen.onkey(snake.moveRight, "Right")
+screen.onkey(player.moveDown, "Down")
+screen.onkey(player.moveLeft, "Left")
+screen.onkey(player.moveUp, "Up")
+screen.onkey(player.moveRight, "Right")
+
+def playerLost():
+    player_lost = False
+    for c in car.cars:
+        if player.distance(c) < 20:
+            player_lost=True
+            break
+    return player_lost
 
 def game():
     screen.update()
-    screen.tracer(0)
     game_over = False
-    while not game_over:
-        snake.moveSnake()
-        screen.update()
-        game_over = snake.detectGameOver()
-        if snake.head.distance(fruit) < 25:
-            snake.enlarge()
-            fruit.refresh()
-            scoreboard.addScore()
+    player_won = False
 
+    runs = 0
     
+    while (not game_over) and (not player_won):      
+        runs += 1
+        time.sleep(0.1)
+        if runs % 2 == 0:
+            car.createCar()
+        car.moveCars()
+        screen.update()
+
+        game_over = playerLost()
+        player_won = player.didPlayerWin()
+
+    if player_won:
+        print("gg")
+    if game_over:
+        print("sucks to suck")
+
 
 game()
 
