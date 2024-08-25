@@ -1,14 +1,15 @@
 from tkinter import *
 
 root = Tk()
-root.title("Pomodoro")
-root.config(padx=100, pady=100)
-canvas  = Canvas(width=400, height=444)
+root.title("Password manager")
+root.minsize(width=500, height=600)
+root.configure(padx=30, pady=30)
 
-tomato_img = PhotoImage(file="./assets/tomato.png")
-canvas.create_image(200, 222, image=tomato_img)
-canvas.pack()
+canvas = Canvas()
+canvas.configure()
 
+logo_image=PhotoImage(file="./assets/logo.png")
 
+canvas.create_image(200,200,image=logo_image)
 
 root.mainloop()
