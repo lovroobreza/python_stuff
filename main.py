@@ -1,12 +1,12 @@
-import csv
 import pandas
 
-#3with open("./files/weather_data.csv") as data_file:
-   # data = csv.reader(data_file)
-#    temps=[]
- #   for line in data:
-  #      print(line)
+data_set = pandas.read_csv("./files/nato_phonetic_alphabet.csv")
+alpha_dictionary={row.letter:row.code for (index, row) in data_set.iterrows()}
 
-data = pandas.read_csv("./files/weather_data.csv")
+def sayName(word):
+   for letter in word:
+      print(f"{letter} : {alpha_dictionary[letter.upper()]}\n")
 
-print(data["temp"].max())
+user_word = input("Say your name")
+
+sayName(user_word)
