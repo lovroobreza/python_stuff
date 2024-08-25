@@ -1,5 +1,7 @@
-from turtle import Turtle
+from turtle import Turtle, Screen
+import os
 
+screen = Screen()
 HEADING_UP = 90
 HEADING_DOWN = 270
 HEADING_LEFT = 180
@@ -12,7 +14,10 @@ class Player(Turtle):
     def __init__(self):
         super().__init__()
         self.penup()
-        self.shape("turtle")
+        image = os.path.expanduser("./assets/lovro (1).gif")
+        screen.addshape(image)
+
+        self.shape(image)
         self.color("green")
         self.goto(x=0, y=-300)
 

@@ -1,13 +1,16 @@
-from turtle import Turtle
-import random, math
-
+from turtle import Turtle, Screen
+import random, math, os
+screen = Screen()
 class Car():
     def __init__(self):
         self.cars=[]
 
     def createCar(self):
         print("created car")
-        car = Turtle(shape="square")
+        image = os.path.expanduser("./assets/alja (1).gif")
+        screen.addshape(image)
+
+        car = Turtle(image)
         car.speed=1.5
         car.penup()
         r = math.ceil(random.random() * 255)
