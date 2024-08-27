@@ -1,31 +1,28 @@
-import datetime as dt
-from smtplib import SMTP
-import pandas, json
+import requests
+import requests.api 
+from tkinter import *
 
-MY_EMAIL="obreza.lovro@gmail.com"
-MY_PASSWORD="xlhwzayhmawffjad"
+def get_quote():
+    response = requests.api.get("https://api.kanye.rest")
+    quote = response.json()["quote"]
+    canvas.itemconfig(quote_text, text=quote)
 
-today = (dt.datetime.now().day, dt.datetime.now().month)
 
-def main():
-    data = pandas.read_csv("./files/rojstni-dnevi.csv")
+window = Tk()
+window.title("Kanye Says...")
+window.config(padx=50, pady=50)
 
-    birthday_dict={(d["dan"], d["mesec"]): (d["email"], d["name"]) for (index, d) in data.iterrows()}
-    
-    for item in birthday_dict.items():
-        if (item[0] == today):
-            voscilnica_path="./files/voscilnica.txt"
-            with open(file=voscilnica_path, encoding="utf-8") as letter_file:
-                contents = letter_file.read()
-                contents = contents.replace("[NAME]", item[1][1])
-            
-            with SMTP(host="smtp.gmail.com", port=587) as conntection:
-                conntection.starttls()
-                conntection.login(MY_EMAIL, MY_PASSWORD)
-                conntection.sendmail(from_addr=MY_EMAIL,
-                                     to_addrs=item[1][0], 
-                                     msg=f"SUBJECT: Vse najbolje\n\n{contents}".encode("utf-8"))
-    
+canvas = Canvas(width=300, height=414)
+background_img = PhotoImage(file="./assets/background.png")
+canvas.create_image(150, 207, image=background_img)
+quote_text = canvas.create_text(150, 207, text="Kanye Quote Goes HERE", width=250, font=("Arial", 20, "bold"), fill="white")
+canvas.grid(row=0, column=0)
 
-main()
+kanye_img = PhotoImage(file="./assets/kanye.png")
+kanye_button = Button(image=kanye_img, highlightthickness=0, command=get_quote)
+kanye_button.grid(row=1, column=0)
+
+
+
+window.mainloop()
 print("Successfull exit")
