@@ -5,9 +5,9 @@ from tkinter import *
 def get_quote():
     response = requests.api.get("https://api.kanye.rest")
     quote = response.json()["quote"]
-    canvas.itemconfig(quote_text, text=quote)
+    canvas.itemconfig(quote_text, text=quote) 
 
-
+  
 window = Tk()
 window.title("Kanye Says...")
 window.config(padx=50, pady=50)
