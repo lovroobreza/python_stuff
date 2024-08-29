@@ -1,28 +1,48 @@
 import requests
-import requests.api 
-from tkinter import *
+from datetime import datetime
+from pprint import pprint
 
-def get_quote():
-    response = requests.api.get("https://api.kanye.rest")
-    quote = response.json()["quote"]
-    canvas.itemconfig(quote_text, text=quote)
+APP_ID="0d97f1ed"
+API_KEY="fbaae007dbb76e4b37424a7c324a409c"
 
 
-window = Tk()
-window.title("Kanye Says...")
-window.config(padx=50, pady=50)
+headers={
+    "x-app-id": APP_ID,
+    "x-app-key": API_KEY
+}
 
-canvas = Canvas(width=300, height=414)
-background_img = PhotoImage(file="./assets/background.png")
-canvas.create_image(150, 207, image=background_img)
-quote_text = canvas.create_text(150, 207, text="Kanye Quote Goes HERE", width=250, font=("Arial", 20, "bold"), fill="white")
-canvas.grid(row=0, column=0)
+exercise_text=input("What did you do?")
 
-kanye_img = PhotoImage(file="./assets/kanye.png")
-kanye_button = Button(image=kanye_img, highlightthickness=0, command=get_quote)
-kanye_button.grid(row=1, column=0)
+body={
+    "query": exercise_text,
+    "weight_kg": 98,
+    "height_cm": 185,
+    "age": 23
+}
+
+response = requests.post(url=f"https://trackapi.nutritionix.com/v2/natural/exercise", data=body, headers=headers)
+
+exercises = response.json()["exercises"]
+
+GOOGLE_SHEET="https://api.sheety.co/dbcf9e222bbf35399b7bc1d5aa5daee0/workoutsLovro/workouts"
+
+today_date = datetime.now().strftime("%d/%m/%Y")
+now_time = datetime.now().strftime("%X")
+
+for exercise in exercises:
+    pprint(exercise)
+    sheet_inputs = {
+        "workout": {
+            "date": today_date,
+            "time": now_time,
+            "exercise": exercise["name"].title(),
+            "duration": exercise["duration_min"],
+            "calories": exercise["nf_calories"]
+        }
+    }
+
+    google_sheet_response = requests.post(url=f"{GOOGLE_SHEET}", json=sheet_inputs)
+    pprint(google_sheet_response)
 
 
-
-window.mainloop()
-print("Successfull exit")
+#print(google_sheet_response.json())
