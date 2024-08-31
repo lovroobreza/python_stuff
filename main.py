@@ -1,48 +1,30 @@
 import requests
 from datetime import datetime
 from pprint import pprint
+from bs4 import BeautifulSoup
 
-APP_ID="0d97f1ed"
-API_KEY="fbaae007dbb76e4b37424a7c324a409c"
+import spotipy
+from spotipy.oauth2 import SpotifyOAuth
 
+#date = input("Which date would you like to look at?")
+#response = requests.get(f"https://www.billboard.com/charts/hot-100/{date}")
+#response = requests.get(f"https://www.billboard.com/charts/hot-100/2000-12-12")
 
-headers={
-    "x-app-id": APP_ID,
-    "x-app-key": API_KEY
-}
+#soup = BeautifulSoup(response.text)
 
-exercise_text=input("What did you do?")
-
-body={
-    "query": exercise_text,
-    "weight_kg": 98,
-    "height_cm": 185,
-    "age": 23
-}
-
-response = requests.post(url=f"https://trackapi.nutritionix.com/v2/natural/exercise", data=body, headers=headers)
-
-exercises = response.json()["exercises"]
-
-GOOGLE_SHEET="https://api.sheety.co/dbcf9e222bbf35399b7bc1d5aa5daee0/workoutsLovro/workouts"
-
-today_date = datetime.now().strftime("%d/%m/%Y")
-now_time = datetime.now().strftime("%X")
-
-for exercise in exercises:
-    pprint(exercise)
-    sheet_inputs = {
-        "workout": {
-            "date": today_date,
-            "time": now_time,
-            "exercise": exercise["name"].title(),
-            "duration": exercise["duration_min"],
-            "calories": exercise["nf_calories"]
-        }
-    }
-
-    google_sheet_response = requests.post(url=f"{GOOGLE_SHEET}", json=sheet_inputs)
-    pprint(google_sheet_response)
+#song_names_spans = soup.select("li ul li h3")
+#song_names = [song.getText().strip() for song in song_names_spans]
 
 
-#print(google_sheet_response.json())
+
+CLIENT_ID="1d8289f48a514ac29c50da2b22ad7498"
+CLIENT_secret="0a0c49ab9e314f57b7cfefcfb734419c"
+
+scope = "user-library-read"
+
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_secret,redirect_uri="localost:3000", scope=scope))
+
+results = sp.current_user_saved_tracks()
+for idx, item in enumerate(results['items']):
+    track = item['track']
+    print(idx, track['artists'][0]['name'], " – ", track['name'])
